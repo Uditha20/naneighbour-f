@@ -7,34 +7,30 @@ import { Chat, Channel, Window, ChannelHeader, MessageList, MessageInput } from 
 import { StreamChat } from 'stream-chat';
 import Register from './components/Register'; 
 import Login from './components/Login'; 
+import Sidebar from './components/Sidebar';
+import Dashboard from './components/Dashboard';
+import UserList from './components/UserList';
 
 const App = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-2 p-0">
+            <Sidebar />
+          </div>
+          <div className="col-10 main-content">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/users" element={<UserList />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </div>
+        </div>
+      </div>
     </Router>
-  );
-};
-
-const Registration = () => {
-  const navigate = useNavigate();
-
-  const handleRegister = () => {
-    navigate('/chat');
-  };
-  const handleLogin = () => { 
-    navigate('/login');
-  } 
-
-  return (
-    <div>
-      <h2>Registration Page</h2>
-      <button onClick={handleRegister}>Go to Chat</button>
-    </div>
   );
 };
 
@@ -53,7 +49,7 @@ const ChatPage = () => {
       }
 
       const { data } = await axios.post('http://localhost:5000/create-token', { userId, username });
-      const client = StreamChat.getInstance("3farf8pa44yp");
+      const client = StreamChat.getInstance('3farf8pa44yp');
 
       await client.connectUser({ id: userId, name: username }, data.token);
 
